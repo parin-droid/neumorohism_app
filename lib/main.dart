@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:neumorohism_app/custom_widget/custom_switch_button.dart';
+import 'package:neumorohism_app/screens/watch_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CustomSwitchButton(isChecked: isChecked),
+      home: WatchScreen(),
     );
   }
 }

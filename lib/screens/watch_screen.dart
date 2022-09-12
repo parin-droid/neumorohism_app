@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 
@@ -14,16 +16,17 @@ class _WatchScreenState extends State<WatchScreen>
     with SingleTickerProviderStateMixin {
   TabController? tabController;
   bool isBack = true;
+  bool isDayClick = true;
   bool isChecked = false;
   bool isSetting = true;
-  List<Days> dayList = [
-    Days("su", false),
-    Days("mo", false),
-    Days("tu", false),
-    Days("we", false),
-    Days("th", false),
-    Days("fr", false),
-    Days("sa", false),
+  List<Days> daysList = [
+    Days("Sunday", false),
+    Days("Monday", false),
+    Days("Tuesday", false),
+    Days("Wednesday", false),
+    Days("Thursday", false),
+    Days("Friday", false),
+    Days("Saturday", false),
   ];
   List<Alarm> alarmList = [
     Alarm(
@@ -127,8 +130,34 @@ class _WatchScreenState extends State<WatchScreen>
 
   @override
   Widget build(BuildContext context) {
+    DateTime dateTime = DateTime.now();
     const backgroundColor = Color(0xFFE9ECF5);
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Container(
+            height: 60,
+            width: 60,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                  colors: [Colors.red, Colors.amber],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter),
+              boxShadow: [
+                BoxShadow(
+                    blurRadius: 13.0,
+                    color: Colors.redAccent,
+                    offset: Offset(3, 1),
+                    inset: false)
+              ],
+            ),
+            child: const Icon(
+              Icons.add,
+              size: 40,
+            )),
+      ),
       backgroundColor: backgroundColor,
       body: SafeArea(
         child: Column(
@@ -274,88 +303,301 @@ class _WatchScreenState extends State<WatchScreen>
             ),
             Expanded(
               child: TabBarView(controller: tabController, children: [
-                Container(),
-                ListView.builder(
-                    itemCount: alarmList.length,
-                    shrinkWrap: true,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemBuilder: (context, int mainIndex) {
-                      final item = alarmList[mainIndex];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 20.0),
+                SingleChildScrollView(
+                  padding: const EdgeInsets.only(bottom: 100),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                (MediaQuery.of(context).size.width * 0.85) / 2),
+                            boxShadow: const [
+                              BoxShadow(
+                                  blurRadius: 15,
+                                  color: Colors.white,
+                                  offset: Offset(-5, -5),
+                                  inset: false),
+                              BoxShadow(
+                                  blurRadius: 15,
+                                  color: Color(0xFFA7A9AF),
+                                  offset: Offset(5, 5),
+                                  inset: false),
+                            ]),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 20.0),
+                          height: MediaQuery.of(context).size.width * 0.85,
+                          width: MediaQuery.of(context).size.width * 0.85,
                           decoration: BoxDecoration(
                               color: backgroundColor,
-                              borderRadius: BorderRadius.circular(20),
                               boxShadow: const [
                                 BoxShadow(
-                                    blurRadius: 15,
+                                    blurRadius: 8,
                                     color: Colors.white,
-                                    offset: Offset(-3, -3)),
+                                    offset: Offset(-3, -3),
+                                    inset: true),
                                 BoxShadow(
-                                    blurRadius: 20,
+                                    blurRadius: 8,
                                     color: Color(0xFFA7A9AF),
-                                    offset: Offset(8, 8))
-                              ]),
-                          child: Row(
-                            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(item.time!,
-                                      style: const TextStyle(
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold)),
-                                  Text(item.text!),
-                                  const SizedBox(
-                                    height: 8,
+                                    offset: Offset(4, 4),
+                                    inset: true),
+                              ],
+                              borderRadius: BorderRadius.circular(
+                                  (MediaQuery.of(context).size.width * 0.85) /
+                                      2)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(35.0),
+                            child: Stack(
+                              children: [
+                                Container(
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.85,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.85,
+                                  decoration: BoxDecoration(
+                                      color: backgroundColor,
+                                      boxShadow: const [
+                                        BoxShadow(
+                                            blurRadius: 20,
+                                            color: Colors.white,
+                                            offset: Offset(-5, -5),
+                                            inset: false),
+                                        BoxShadow(
+                                            blurRadius: 20,
+                                            color: Color(0xFFA7A9AF),
+                                            offset: Offset(5, 5),
+                                            inset: false),
+                                      ],
+                                      borderRadius: BorderRadius.circular(
+                                          (MediaQuery.of(context).size.width *
+                                                  0.85) /
+                                              2)),
+                                ),
+                                Transform.rotate(
+                                  angle: pi / 2,
+                                  child: Container(
+                                    constraints: const BoxConstraints.expand(),
+                                    child: CustomPaint(
+                                      painter: ClockPainter(context, dateTime),
+                                    ),
                                   ),
-                                  SizedBox(
-                                    height: 30,
-                                    child: ListView.builder(
-                                        itemCount:
-                                            alarmList[mainIndex].dayList.length,
-                                        shrinkWrap: true,
-                                        scrollDirection: Axis.horizontal,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) {
-                                          final data = alarmList[mainIndex]
-                                              .dayList[index];
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 4.0),
-                                            child: Text(data.day!),
-                                          );
-                                        }),
-                                  )
-                                ],
-                              ),
-                              Flex(
-                                direction: Axis.horizontal,
-                                children: [
-                                  CustomSwitchButton(
-                                      isChecked:
-                                          alarmList[mainIndex].isChecked!),
-                                ],
-                              ),
-                              /* FlutterSwitch(
-                                  activeColor: Colors.black,
-                                  value: alarmList[mainIndex].isChecked!,
-                                  onToggle: (val) {
-                                    setState(() {
-                                      alarmList[mainIndex].isChecked = val;
-                                    });
-                                  })*/
-                            ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      );
-                    }),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                (MediaQuery.of(context).size.width * 0.85) / 2),
+                            boxShadow: const [
+                              BoxShadow(
+                                  blurRadius: 15,
+                                  color: Colors.white,
+                                  offset: Offset(-5, -5),
+                                  inset: false),
+                              BoxShadow(
+                                  blurRadius: 15,
+                                  color: Color(0xFFA7A9AF),
+                                  offset: Offset(5, 5),
+                                  inset: false),
+                            ]),
+                        child: Container(
+                          height: 70,
+                          width: 180,
+                          decoration: BoxDecoration(
+                              color: backgroundColor,
+                              boxShadow: const [
+                                BoxShadow(
+                                    blurRadius: 8,
+                                    color: Colors.white,
+                                    offset: Offset(-3, -3),
+                                    inset: true),
+                                BoxShadow(
+                                    blurRadius: 5,
+                                    color: Color(0xFFA7A9AF),
+                                    offset: Offset(3, 3),
+                                    inset: true),
+                              ],
+                              borderRadius: BorderRadius.circular(25)),
+                          child: const Center(
+                            child: Text(
+                              "13:30",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 45,
+                                  color: Colors.black54),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Text(
+                        "Hello ! Wack up Time",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.black54),
+                      ),
+                      SizedBox(
+                        height: 100,
+                        child: ListView.builder(
+                            itemCount: daysList.length,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              final item = daysList[index];
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0, vertical: 30.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      item.isClick = !item.isClick!;
+                                    });
+                                  },
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    height: 40,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                        color: backgroundColor,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              blurRadius:
+                                                  item.isClick! ? 3.0 : 10.0,
+                                              color: Colors.white,
+                                              offset: item.isClick!
+                                                  ? const Offset(-2, -2)
+                                                  : const Offset(-3, -3),
+                                              inset: item.isClick!),
+                                          BoxShadow(
+                                              blurRadius:
+                                                  item.isClick! ? 3.0 : 20.0,
+                                              color: const Color(0xFFA7A9AF),
+                                              offset: item.isClick!
+                                                  ? const Offset(2, 2)
+                                                  : const Offset(8, 8),
+                                              inset: item.isClick!)
+                                        ]),
+                                    child: Center(child: Text(item.day!)),
+                                  ),
+                                ),
+                              );
+                            }),
+                      )
+                    ],
+                  ),
+                ),
+                SingleChildScrollView(
+                  padding: const EdgeInsets.only(bottom: 100),
+                  child: ListView.builder(
+                      itemCount: alarmList.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, int mainIndex) {
+                        final item = alarmList[mainIndex];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 20.0),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 20.0),
+                            decoration: BoxDecoration(
+                                color: backgroundColor,
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: const [
+                                  BoxShadow(
+                                      blurRadius: 15,
+                                      color: Colors.white,
+                                      offset: Offset(-3, -3)),
+                                  BoxShadow(
+                                      blurRadius: 20,
+                                      color: Color(0xFFA7A9AF),
+                                      offset: Offset(8, 8))
+                                ]),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(item.time!,
+                                        style: const TextStyle(
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold)),
+                                    Text(item.text!),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    SizedBox(
+                                      height: 30,
+                                      child: ListView.builder(
+                                          itemCount: alarmList[mainIndex]
+                                              .dayList
+                                              .length,
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            final data = alarmList[mainIndex]
+                                                .dayList[index];
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    data.isClick =
+                                                        !data.isClick!;
+                                                  });
+                                                },
+                                                child: Text(
+                                                  data.day!,
+                                                  style: TextStyle(
+                                                      color: data.isClick ==
+                                                              true
+                                                          ? Colors.deepOrange
+                                                          : Colors.black),
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                  width: 70,
+                                  child: CustomSwitchButton(
+                                      isChecked:
+                                          alarmList[mainIndex].isChecked!),
+                                ),
+                                /* FlutterSwitch(
+                                    activeColor: Colors.black,
+                                    value: alarmList[mainIndex].isChecked!,
+                                    onToggle: (val) {
+                                      setState(() {
+                                        alarmList[mainIndex].isChecked = val;
+                                      });
+                                    })*/
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                ),
                 Container()
               ]),
             ),
@@ -377,7 +619,52 @@ class Alarm {
 
 class Days {
   final String? day;
-  final bool? isClick;
+  bool? isClick;
 
   Days(this.day, this.isClick);
+}
+
+class ClockPainter extends CustomPainter {
+  final BuildContext context;
+  final DateTime dateTime;
+
+  ClockPainter(this.context, this.dateTime);
+  @override
+  void paint(Canvas canvas, Size size) {
+    double centerX = size.width / 2;
+    double centerY = size.height / 2;
+    double radius = min(centerX, centerY);
+    Offset center = Offset(centerX, centerY);
+
+    print(dateTime);
+    double hourX = centerX - radius * 0.6 * cos((dateTime.hour * 6) * pi / 180);
+    double hourY = centerY - radius * 0.6 * sin((dateTime.hour * 6) * pi / 180);
+    double minX =
+        centerX - radius * 0.9 * cos((dateTime.minute * 6) * pi / 180);
+    double minY =
+        centerX - radius * 0.9 * sin((dateTime.minute * 6) * pi / 180);
+
+    Paint secLinePaint = Paint()
+      ..color = Colors.red
+      ..strokeWidth = 8
+      ..strokeCap = StrokeCap.round;
+
+    Paint roundPaint = Paint()..color = const Color(0xFFE9ECF5);
+    Paint innerRoundPaint = Paint()..color = Colors.red;
+
+    print("date & time1 : $hourX");
+    print("date & time2 : $hourY");
+    print("date & time3 : $minX");
+    print("date & time4 : $minY");
+
+    canvas.drawLine(center, Offset(hourX, hourY), secLinePaint);
+    canvas.drawLine(center, Offset(minX, minY), secLinePaint);
+    canvas.drawCircle(center, 20, roundPaint);
+    canvas.drawCircle(center, 10, innerRoundPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
 }
