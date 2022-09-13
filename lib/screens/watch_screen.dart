@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
+import 'package:flutter/services.dart';
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
+import 'package:intl/intl.dart';
 
 import '../custom_widget/custom_switch_button.dart';
 
@@ -15,10 +17,13 @@ class WatchScreen extends StatefulWidget {
 class _WatchScreenState extends State<WatchScreen>
     with SingleTickerProviderStateMixin {
   TabController? tabController;
+  TextEditingController hourController = TextEditingController();
+  TextEditingController minController = TextEditingController();
   bool isBack = true;
   bool isDayClick = true;
   bool isChecked = false;
   bool isSetting = true;
+  DateTime dateTime = DateFormat("hh:mm").parse("00:00");
   List<Days> daysList = [
     Days("Sunday", false),
     Days("Monday", false),
@@ -130,7 +135,8 @@ class _WatchScreenState extends State<WatchScreen>
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateTime = DateTime.now();
+    //  final hour = dateTime.hour.toDouble();
+    //final angle = (-pi * (hour / -60)) * 2;
     const backgroundColor = Color(0xFFE9ECF5);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -382,7 +388,7 @@ class _WatchScreenState extends State<WatchScreen>
                                       painter: ClockPainter(context, dateTime),
                                     ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -425,22 +431,81 @@ class _WatchScreenState extends State<WatchScreen>
                                     inset: true),
                               ],
                               borderRadius: BorderRadius.circular(25)),
-                          child: const Center(
-                            child: Text(
-                              "13:30",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 45,
-                                  color: Colors.black54),
-                            ),
-                          ),
+                          child: Center(
+                              child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 22.0),
+                                child: SizedBox(
+                                  width: 70,
+                                  child: TextFormField(
+                                    maxLength: 2,
+                                    controller: hourController,
+                                    textAlign: TextAlign.center,
+                                    onFieldSubmitted: (value) {
+                                      setState(() {
+                                        dateTime = DateFormat("hh : mm").parse(
+                                            "${hourController.text} : ${minController.text}");
+                                      });
+                                    },
+                                    decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        counterText: '',
+                                        hintText: "00"),
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 45,
+                                        color: Colors.black54),
+                                  ),
+                                ),
+                              ),
+                              const Text(
+                                ":",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 40,
+                                    color: Colors.black54),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 22.0),
+                                child: SizedBox(
+                                  width: 70,
+                                  child: TextFormField(
+                                    controller: minController,
+                                    maxLength: 2,
+                                    textAlign: TextAlign.center,
+                                    onFieldSubmitted: (value) {
+                                      setState(() {
+                                        dateTime = DateFormat("hh : mm").parse(
+                                            "${hourController.text} : ${minController.text}");
+                                      });
+                                    },
+                                    decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        counterText: "",
+                                        hintText: "00"),
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 45,
+                                        color: Colors.black54),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )),
                         ),
                       ),
                       const SizedBox(
                         height: 20,
                       ),
                       const Text(
-                        "Hello ! Wack up Time",
+                        "Please ! Enter Time in 24 hours",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
@@ -635,14 +700,27 @@ class ClockPainter extends CustomPainter {
     double centerY = size.height / 2;
     double radius = min(centerX, centerY);
     Offset center = Offset(centerX, centerY);
+    double outerRadius = radius - 10;
+    double innerRadius = radius - 20;
+    int hours = dateTime.hour;
+    int minutes = dateTime.minute;
 
     print(dateTime);
-    double hourX = centerX - radius * 0.6 * cos((dateTime.hour * 6) * pi / 180);
-    double hourY = centerY - radius * 0.6 * sin((dateTime.hour * 6) * pi / 180);
+    print(dateTime.timeZoneOffset.inHours);
+    print(dateTime.hour);
+    print(dateTime.minute);
+    double hourX = centerX -
+        outerRadius *
+            0.6 *
+            cos((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
+    double hourY = centerY -
+        outerRadius *
+            0.6 *
+            sin((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
     double minX =
-        centerX - radius * 0.9 * cos((dateTime.minute * 6) * pi / 180);
+        centerX - outerRadius * 0.7 * cos(dateTime.minute * 6 * pi / 180);
     double minY =
-        centerX - radius * 0.9 * sin((dateTime.minute * 6) * pi / 180);
+        centerX - outerRadius * 0.7 * sin(dateTime.minute * 6 * pi / 180);
 
     Paint secLinePaint = Paint()
       ..color = Colors.red
@@ -657,10 +735,24 @@ class ClockPainter extends CustomPainter {
     print("date & time3 : $minX");
     print("date & time4 : $minY");
 
+    /* canvas.rotate(dateTime.hour > 12
+        ? 2 * pi * ((hours - 12) / 12 + (minutes / 720))
+        : 2 * pi * ((hours - 12) + (minutes / 720)));*/
+
     canvas.drawLine(center, Offset(hourX, hourY), secLinePaint);
     canvas.drawLine(center, Offset(minX, minY), secLinePaint);
     canvas.drawCircle(center, 20, roundPaint);
     canvas.drawCircle(center, 10, innerRoundPaint);
+
+    for (int i = 0; i < 360; i += 30) {
+      double x1 = centerX - radius * cos(i * pi / 180);
+      double y1 = centerX - radius * sin(i * pi / 180);
+
+      double x2 = centerX - 110 * cos(i * pi / 180);
+      double y2 = centerX - 110 * sin(i * pi / 180);
+
+      canvas.drawCircle(Offset(x2, y2), 3, Paint()..color = Colors.grey);
+    }
   }
 
   @override
