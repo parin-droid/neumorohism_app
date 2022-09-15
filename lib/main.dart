@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: WatchScreen(),
+      home: const WatchScreen(),
     );
   }
 }

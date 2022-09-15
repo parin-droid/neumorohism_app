@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter/services.dart';
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 import '../custom_widget/custom_switch_button.dart';
@@ -23,7 +25,9 @@ class _WatchScreenState extends State<WatchScreen>
   bool isDayClick = true;
   bool isChecked = false;
   bool isSetting = true;
-  DateTime dateTime = DateFormat("hh:mm").parse("00:00");
+  bool isEnter = false;
+  DateTime? dateTime;
+  Timer? timer;
   List<Days> daysList = [
     Days("Sunday", false),
     Days("Monday", false),
@@ -127,8 +131,19 @@ class _WatchScreenState extends State<WatchScreen>
         false),
   ];
 
+  void startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {});
+    });
+  }
+
+  void stopTimer() {
+    timer!.cancel();
+  }
+
   @override
   void initState() {
+    startTimer();
     super.initState();
     tabController = TabController(length: 3, vsync: this);
   }
@@ -137,11 +152,24 @@ class _WatchScreenState extends State<WatchScreen>
   Widget build(BuildContext context) {
     //  final hour = dateTime.hour.toDouble();
     //final angle = (-pi * (hour / -60)) * 2;
+    //  dateTime = DateTime.now();
     const backgroundColor = Color(0xFFE9ECF5);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          if (hourController.text.isEmpty && minController.text.isEmpty) {
+            Fluttertoast.showToast(msg: "Please enter Time");
+          } else {
+            Fluttertoast.showToast(msg: "Your Alarm is set");
+          }
+
+          setState(() {
+            dateTime = null;
+          });
+
+          startTimer();
+        },
         child: Container(
             height: 60,
             width: 60,
@@ -385,7 +413,8 @@ class _WatchScreenState extends State<WatchScreen>
                                   child: Container(
                                     constraints: const BoxConstraints.expand(),
                                     child: CustomPaint(
-                                      painter: ClockPainter(context, dateTime),
+                                      painter: ClockPainter(
+                                          context, dateTime ?? DateTime.now()),
                                     ),
                                   ),
                                 ),
@@ -445,7 +474,9 @@ class _WatchScreenState extends State<WatchScreen>
                                     controller: hourController,
                                     textAlign: TextAlign.center,
                                     onFieldSubmitted: (value) {
+                                      stopTimer();
                                       setState(() {
+                                        isEnter = true;
                                         dateTime = DateFormat("hh : mm").parse(
                                             "${hourController.text} : ${minController.text}");
                                       });
@@ -453,6 +484,10 @@ class _WatchScreenState extends State<WatchScreen>
                                     decoration: const InputDecoration(
                                         border: InputBorder.none,
                                         counterText: '',
+                                        hintStyle: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 45,
+                                            color: Colors.grey),
                                         hintText: "00"),
                                     keyboardType:
                                         const TextInputType.numberWithOptions(),
@@ -479,7 +514,9 @@ class _WatchScreenState extends State<WatchScreen>
                                     maxLength: 2,
                                     textAlign: TextAlign.center,
                                     onFieldSubmitted: (value) {
+                                      stopTimer();
                                       setState(() {
+                                        isEnter = true;
                                         dateTime = DateFormat("hh : mm").parse(
                                             "${hourController.text} : ${minController.text}");
                                       });
@@ -487,6 +524,10 @@ class _WatchScreenState extends State<WatchScreen>
                                     decoration: const InputDecoration(
                                         border: InputBorder.none,
                                         counterText: "",
+                                        hintStyle: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 45,
+                                            color: Colors.grey),
                                         hintText: "00"),
                                     keyboardType:
                                         const TextInputType.numberWithOptions(),
@@ -694,6 +735,7 @@ class ClockPainter extends CustomPainter {
   final DateTime dateTime;
 
   ClockPainter(this.context, this.dateTime);
+
   @override
   void paint(Canvas canvas, Size size) {
     double centerX = size.width / 2;
@@ -704,11 +746,14 @@ class ClockPainter extends CustomPainter {
     double innerRadius = radius - 20;
     int hours = dateTime.hour;
     int minutes = dateTime.minute;
+    Path path = Path();
 
-    print(dateTime);
-    print(dateTime.timeZoneOffset.inHours);
-    print(dateTime.hour);
-    print(dateTime.minute);
+    // print(dateTime);
+    // print(dateTime.timeZoneOffset.inHours);
+    // print(dateTime.hour);
+    // print(dateTime.minute);
+    // print(dateTime.second);
+
     double hourX = centerX -
         outerRadius *
             0.6 *
@@ -721,26 +766,45 @@ class ClockPainter extends CustomPainter {
         centerX - outerRadius * 0.7 * cos(dateTime.minute * 6 * pi / 180);
     double minY =
         centerX - outerRadius * 0.7 * sin(dateTime.minute * 6 * pi / 180);
+    double secX =
+        centerX - outerRadius * 0.8 * cos(dateTime.second * 6 * pi / 180);
+    double secY =
+        centerX - outerRadius * 0.8 * sin(dateTime.second * 6 * pi / 180);
 
-    Paint secLinePaint = Paint()
+    Paint minLinePaint = Paint()
       ..color = Colors.red
       ..strokeWidth = 8
       ..strokeCap = StrokeCap.round;
+    Paint blurMinLinePaint = Paint()
+      ..color = Colors.red
+      ..strokeWidth = 8
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, (8))
+      ..strokeCap = StrokeCap.round;
+    Paint secLinePaint = Paint()
+      ..color = Colors.blueGrey
+      ..strokeWidth = 3
+      ..strokeCap = StrokeCap.round;
 
     Paint roundPaint = Paint()..color = const Color(0xFFE9ECF5);
+    Paint blurRoundPaint = Paint()
+      ..color = Colors.grey
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, (5));
     Paint innerRoundPaint = Paint()..color = Colors.red;
 
-    print("date & time1 : $hourX");
-    print("date & time2 : $hourY");
-    print("date & time3 : $minX");
-    print("date & time4 : $minY");
+    // print("date & time1 : $hourX");
+    // print("date & time2 : $hourY");
+    // print("date & time3 : $minX");
+    // print("date & time4 : $minY");
 
     /* canvas.rotate(dateTime.hour > 12
         ? 2 * pi * ((hours - 12) / 12 + (minutes / 720))
         : 2 * pi * ((hours - 12) + (minutes / 720)));*/
-
-    canvas.drawLine(center, Offset(hourX, hourY), secLinePaint);
-    canvas.drawLine(center, Offset(minX, minY), secLinePaint);
+    // canvas.drawLine(center, Offset(hourX, hourY), blurMinLinePaint);
+    canvas.drawLine(center, Offset(hourX, hourY), minLinePaint);
+    // canvas.drawLine(center, Offset(minX, minY), blurMinLinePaint);
+    canvas.drawLine(center, Offset(minX, minY), minLinePaint);
+    canvas.drawLine(center, Offset(secX, secY), secLinePaint);
+    canvas.drawCircle(center, 20, blurRoundPaint);
     canvas.drawCircle(center, 20, roundPaint);
     canvas.drawCircle(center, 10, innerRoundPaint);
 
