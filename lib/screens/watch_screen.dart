@@ -166,6 +166,8 @@ class _WatchScreenState extends State<WatchScreen>
 
           setState(() {
             dateTime = null;
+            hourController.clear();
+            minController.clear();
           });
 
           startTimer();
