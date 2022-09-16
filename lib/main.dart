@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:neumorohism_app/providers/alarm_provider.dart';
 import 'package:neumorohism_app/screens/watch_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,12 +13,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    bool isChecked = false;
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AlarmProvider()),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const WatchScreen(),
       ),
-      home: const WatchScreen(),
     );
   }
 }

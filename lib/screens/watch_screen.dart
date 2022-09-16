@@ -2,12 +2,10 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
-import 'package:flutter/services.dart';
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
-
-import '../custom_widget/custom_switch_button.dart';
+import 'package:neumorohism_app/screens/alarmpage.dart';
 
 class WatchScreen extends StatefulWidget {
   const WatchScreen({Key? key}) : super(key: key);
@@ -16,8 +14,7 @@ class WatchScreen extends StatefulWidget {
   State<WatchScreen> createState() => _WatchScreenState();
 }
 
-class _WatchScreenState extends State<WatchScreen>
-    with SingleTickerProviderStateMixin {
+class _WatchScreenState extends State<WatchScreen> with SingleTickerProviderStateMixin {
   TabController? tabController;
   TextEditingController hourController = TextEditingController();
   TextEditingController minController = TextEditingController();
@@ -177,17 +174,8 @@ class _WatchScreenState extends State<WatchScreen>
             width: 60,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              gradient: LinearGradient(
-                  colors: [Colors.red, Colors.amber],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter),
-              boxShadow: [
-                BoxShadow(
-                    blurRadius: 13.0,
-                    color: Colors.redAccent,
-                    offset: Offset(3, 1),
-                    inset: false)
-              ],
+              gradient: LinearGradient(colors: [Colors.red, Colors.amber], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+              boxShadow: [BoxShadow(blurRadius: 13.0, color: Colors.redAccent, offset: Offset(3, 1), inset: false)],
             ),
             child: const Icon(
               Icons.add,
@@ -199,8 +187,7 @@ class _WatchScreenState extends State<WatchScreen>
         child: Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 20.0, right: 20.0, top: 25.0),
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 25.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -214,25 +201,10 @@ class _WatchScreenState extends State<WatchScreen>
                       duration: const Duration(milliseconds: 200),
                       height: 40,
                       width: 40,
-                      decoration: BoxDecoration(
-                          color: backgroundColor,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: isBack ? 3.0 : 15.0,
-                                color: Colors.white,
-                                offset: isBack
-                                    ? const Offset(-2, -2)
-                                    : const Offset(-8, -8),
-                                inset: isBack),
-                            BoxShadow(
-                                blurRadius: isBack ? 3.0 : 20.0,
-                                color: const Color(0xFFA7A9AF),
-                                offset: isBack
-                                    ? const Offset(2, 2)
-                                    : const Offset(8, 8),
-                                inset: isBack)
-                          ]),
+                      decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(15), boxShadow: [
+                        BoxShadow(blurRadius: isBack ? 3.0 : 15.0, color: Colors.white, offset: isBack ? const Offset(-2, -2) : const Offset(-8, -8), inset: isBack),
+                        BoxShadow(blurRadius: isBack ? 3.0 : 20.0, color: const Color(0xFFA7A9AF), offset: isBack ? const Offset(2, 2) : const Offset(8, 8), inset: isBack)
+                      ]),
                       child: const Icon(Icons.arrow_back_ios_new_outlined),
                     ),
                   ),
@@ -245,25 +217,10 @@ class _WatchScreenState extends State<WatchScreen>
                     child: Container(
                       height: 40,
                       width: 40,
-                      decoration: BoxDecoration(
-                          color: backgroundColor,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: isSetting ? 3.0 : 15.0,
-                                color: Colors.white,
-                                offset: isSetting
-                                    ? const Offset(-2, -2)
-                                    : const Offset(-8, -8),
-                                inset: isSetting),
-                            BoxShadow(
-                                blurRadius: isSetting ? 3.0 : 20.0,
-                                color: const Color(0xFFA7A9AF),
-                                offset: isSetting
-                                    ? const Offset(2, 2)
-                                    : const Offset(8, 8),
-                                inset: isSetting)
-                          ]),
+                      decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(15), boxShadow: [
+                        BoxShadow(blurRadius: isSetting ? 3.0 : 15.0, color: Colors.white, offset: isSetting ? const Offset(-2, -2) : const Offset(-8, -8), inset: isSetting),
+                        BoxShadow(blurRadius: isSetting ? 3.0 : 20.0, color: const Color(0xFFA7A9AF), offset: isSetting ? const Offset(2, 2) : const Offset(8, 8), inset: isSetting)
+                      ]),
                       child: const Icon(
                         Icons.settings,
                         color: Colors.deepOrange,
@@ -285,16 +242,7 @@ class _WatchScreenState extends State<WatchScreen>
                   decoration: BoxDecoration(
                       color: backgroundColor,
                       borderRadius: BorderRadius.circular(25),
-                      boxShadow: const [
-                        BoxShadow(
-                            blurRadius: 20,
-                            color: Colors.white,
-                            offset: Offset(-5, -5)),
-                        BoxShadow(
-                            blurRadius: 20,
-                            color: Color(0xFFA7A9AF),
-                            offset: Offset(8, 8))
-                      ]),
+                      boxShadow: const [BoxShadow(blurRadius: 20, color: Colors.white, offset: Offset(-5, -5)), BoxShadow(blurRadius: 20, color: Color(0xFFA7A9AF), offset: Offset(8, 8))]),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ClipRRect(
@@ -304,18 +252,7 @@ class _WatchScreenState extends State<WatchScreen>
                           indicator: BoxDecoration(
                               color: backgroundColor,
                               borderRadius: BorderRadius.circular(20),
-                              boxShadow: const [
-                                BoxShadow(
-                                    blurRadius: 3,
-                                    color: Colors.white,
-                                    offset: Offset(-3, -3),
-                                    inset: true),
-                                BoxShadow(
-                                    blurRadius: 3,
-                                    color: Color(0xFFA7A9AF),
-                                    offset: Offset(3, 3),
-                                    inset: true)
-                              ]),
+                              boxShadow: const [BoxShadow(blurRadius: 3, color: Colors.white, offset: Offset(-3, -3), inset: true), BoxShadow(blurRadius: 3, color: Color(0xFFA7A9AF), offset: Offset(3, 3), inset: true)]),
                           indicatorSize: TabBarIndicatorSize.tab,
                           labelColor: Colors.black,
                           tabs: const [
@@ -347,76 +284,41 @@ class _WatchScreenState extends State<WatchScreen>
                         height: 10,
                       ),
                       Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                (MediaQuery.of(context).size.width * 0.85) / 2),
-                            boxShadow: const [
-                              BoxShadow(
-                                  blurRadius: 15,
-                                  color: Colors.white,
-                                  offset: Offset(-5, -5),
-                                  inset: false),
-                              BoxShadow(
-                                  blurRadius: 15,
-                                  color: Color(0xFFA7A9AF),
-                                  offset: Offset(5, 5),
-                                  inset: false),
-                            ]),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular((MediaQuery.of(context).size.width * 0.85) / 2), boxShadow: const [
+                          BoxShadow(blurRadius: 15, color: Colors.white, offset: Offset(-5, -5), inset: false),
+                          BoxShadow(blurRadius: 15, color: Color(0xFFA7A9AF), offset: Offset(5, 5), inset: false),
+                        ]),
                         child: Container(
                           height: MediaQuery.of(context).size.width * 0.85,
                           width: MediaQuery.of(context).size.width * 0.85,
                           decoration: BoxDecoration(
                               color: backgroundColor,
                               boxShadow: const [
-                                BoxShadow(
-                                    blurRadius: 8,
-                                    color: Colors.white,
-                                    offset: Offset(-3, -3),
-                                    inset: true),
-                                BoxShadow(
-                                    blurRadius: 8,
-                                    color: Color(0xFFA7A9AF),
-                                    offset: Offset(4, 4),
-                                    inset: true),
+                                BoxShadow(blurRadius: 8, color: Colors.white, offset: Offset(-3, -3), inset: true),
+                                BoxShadow(blurRadius: 8, color: Color(0xFFA7A9AF), offset: Offset(4, 4), inset: true),
                               ],
-                              borderRadius: BorderRadius.circular(
-                                  (MediaQuery.of(context).size.width * 0.85) /
-                                      2)),
+                              borderRadius: BorderRadius.circular((MediaQuery.of(context).size.width * 0.85) / 2)),
                           child: Padding(
                             padding: const EdgeInsets.all(35.0),
                             child: Stack(
                               children: [
                                 Container(
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.85,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.85,
+                                  height: MediaQuery.of(context).size.width * 0.85,
+                                  width: MediaQuery.of(context).size.width * 0.85,
                                   decoration: BoxDecoration(
                                       color: backgroundColor,
                                       boxShadow: const [
-                                        BoxShadow(
-                                            blurRadius: 20,
-                                            color: Colors.white,
-                                            offset: Offset(-5, -5),
-                                            inset: false),
-                                        BoxShadow(
-                                            blurRadius: 20,
-                                            color: Color(0xFFA7A9AF),
-                                            offset: Offset(5, 5),
-                                            inset: false),
+                                        BoxShadow(blurRadius: 20, color: Colors.white, offset: Offset(-5, -5), inset: false),
+                                        BoxShadow(blurRadius: 20, color: Color(0xFFA7A9AF), offset: Offset(5, 5), inset: false),
                                       ],
-                                      borderRadius: BorderRadius.circular(
-                                          (MediaQuery.of(context).size.width *
-                                                  0.85) /
-                                              2)),
+                                      borderRadius: BorderRadius.circular((MediaQuery.of(context).size.width * 0.85) / 2)),
                                 ),
                                 Transform.rotate(
                                   angle: pi / 2,
                                   child: Container(
                                     constraints: const BoxConstraints.expand(),
                                     child: CustomPaint(
-                                      painter: ClockPainter(
-                                          context, dateTime ?? DateTime.now()),
+                                      painter: ClockPainter(context, dateTime ?? DateTime.now()),
                                     ),
                                   ),
                                 ),
@@ -429,37 +331,18 @@ class _WatchScreenState extends State<WatchScreen>
                         height: 40,
                       ),
                       Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                (MediaQuery.of(context).size.width * 0.85) / 2),
-                            boxShadow: const [
-                              BoxShadow(
-                                  blurRadius: 15,
-                                  color: Colors.white,
-                                  offset: Offset(-5, -5),
-                                  inset: false),
-                              BoxShadow(
-                                  blurRadius: 15,
-                                  color: Color(0xFFA7A9AF),
-                                  offset: Offset(5, 5),
-                                  inset: false),
-                            ]),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular((MediaQuery.of(context).size.width * 0.85) / 2), boxShadow: const [
+                          BoxShadow(blurRadius: 15, color: Colors.white, offset: Offset(-5, -5), inset: false),
+                          BoxShadow(blurRadius: 15, color: Color(0xFFA7A9AF), offset: Offset(5, 5), inset: false),
+                        ]),
                         child: Container(
                           height: 70,
                           width: 180,
                           decoration: BoxDecoration(
                               color: backgroundColor,
                               boxShadow: const [
-                                BoxShadow(
-                                    blurRadius: 8,
-                                    color: Colors.white,
-                                    offset: Offset(-3, -3),
-                                    inset: true),
-                                BoxShadow(
-                                    blurRadius: 5,
-                                    color: Color(0xFFA7A9AF),
-                                    offset: Offset(3, 3),
-                                    inset: true),
+                                BoxShadow(blurRadius: 8, color: Colors.white, offset: Offset(-3, -3), inset: true),
+                                BoxShadow(blurRadius: 5, color: Color(0xFFA7A9AF), offset: Offset(3, 3), inset: true),
                               ],
                               borderRadius: BorderRadius.circular(25)),
                           child: Center(
@@ -479,33 +362,18 @@ class _WatchScreenState extends State<WatchScreen>
                                       stopTimer();
                                       setState(() {
                                         isEnter = true;
-                                        dateTime = DateFormat("hh : mm").parse(
-                                            "${hourController.text} : ${minController.text}");
+                                        dateTime = DateFormat("hh : mm").parse("${hourController.text} : ${minController.text}");
                                       });
                                     },
-                                    decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        counterText: '',
-                                        hintStyle: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 45,
-                                            color: Colors.grey),
-                                        hintText: "00"),
-                                    keyboardType:
-                                        const TextInputType.numberWithOptions(),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 45,
-                                        color: Colors.black54),
+                                    decoration: const InputDecoration(border: InputBorder.none, counterText: '', hintStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 45, color: Colors.grey), hintText: "00"),
+                                    keyboardType: const TextInputType.numberWithOptions(),
+                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 45, color: Colors.black54),
                                   ),
                                 ),
                               ),
                               const Text(
                                 ":",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 40,
-                                    color: Colors.black54),
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40, color: Colors.black54),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 22.0),
@@ -519,24 +387,12 @@ class _WatchScreenState extends State<WatchScreen>
                                       stopTimer();
                                       setState(() {
                                         isEnter = true;
-                                        dateTime = DateFormat("hh : mm").parse(
-                                            "${hourController.text} : ${minController.text}");
+                                        dateTime = DateFormat("hh : mm").parse("${hourController.text} : ${minController.text}");
                                       });
                                     },
-                                    decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        counterText: "",
-                                        hintStyle: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 45,
-                                            color: Colors.grey),
-                                        hintText: "00"),
-                                    keyboardType:
-                                        const TextInputType.numberWithOptions(),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 45,
-                                        color: Colors.black54),
+                                    decoration: const InputDecoration(border: InputBorder.none, counterText: "", hintStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 45, color: Colors.grey), hintText: "00"),
+                                    keyboardType: const TextInputType.numberWithOptions(),
+                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 45, color: Colors.black54),
                                   ),
                                 ),
                               ),
@@ -549,10 +405,7 @@ class _WatchScreenState extends State<WatchScreen>
                       ),
                       const Text(
                         "Please ! Enter Time in 24 hours",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                            color: Colors.black54),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.black54),
                       ),
                       SizedBox(
                         height: 100,
@@ -564,8 +417,7 @@ class _WatchScreenState extends State<WatchScreen>
                             itemBuilder: (context, index) {
                               final item = daysList[index];
                               return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0, vertical: 30.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 30.0),
                                 child: GestureDetector(
                                   onTap: () {
                                     setState(() {
@@ -576,27 +428,10 @@ class _WatchScreenState extends State<WatchScreen>
                                     duration: const Duration(milliseconds: 200),
                                     height: 40,
                                     width: 100,
-                                    decoration: BoxDecoration(
-                                        color: backgroundColor,
-                                        borderRadius: BorderRadius.circular(20),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              blurRadius:
-                                                  item.isClick! ? 3.0 : 10.0,
-                                              color: Colors.white,
-                                              offset: item.isClick!
-                                                  ? const Offset(-2, -2)
-                                                  : const Offset(-3, -3),
-                                              inset: item.isClick!),
-                                          BoxShadow(
-                                              blurRadius:
-                                                  item.isClick! ? 3.0 : 20.0,
-                                              color: const Color(0xFFA7A9AF),
-                                              offset: item.isClick!
-                                                  ? const Offset(2, 2)
-                                                  : const Offset(8, 8),
-                                              inset: item.isClick!)
-                                        ]),
+                                    decoration: BoxDecoration(color: backgroundColor, borderRadius: BorderRadius.circular(20), boxShadow: [
+                                      BoxShadow(blurRadius: item.isClick! ? 3.0 : 10.0, color: Colors.white, offset: item.isClick! ? const Offset(-2, -2) : const Offset(-3, -3), inset: item.isClick!),
+                                      BoxShadow(blurRadius: item.isClick! ? 3.0 : 20.0, color: const Color(0xFFA7A9AF), offset: item.isClick! ? const Offset(2, 2) : const Offset(8, 8), inset: item.isClick!)
+                                    ]),
                                     child: Center(child: Text(item.day!)),
                                   ),
                                 ),
@@ -606,106 +441,7 @@ class _WatchScreenState extends State<WatchScreen>
                     ],
                   ),
                 ),
-                SingleChildScrollView(
-                  padding: const EdgeInsets.only(bottom: 100),
-                  child: ListView.builder(
-                      itemCount: alarmList.length,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, int mainIndex) {
-                        final item = alarmList[mainIndex];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 20.0),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 20.0),
-                            decoration: BoxDecoration(
-                                color: backgroundColor,
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: const [
-                                  BoxShadow(
-                                      blurRadius: 15,
-                                      color: Colors.white,
-                                      offset: Offset(-3, -3)),
-                                  BoxShadow(
-                                      blurRadius: 20,
-                                      color: Color(0xFFA7A9AF),
-                                      offset: Offset(8, 8))
-                                ]),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(item.time!,
-                                        style: const TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold)),
-                                    Text(item.text!),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    SizedBox(
-                                      height: 30,
-                                      child: ListView.builder(
-                                          itemCount: alarmList[mainIndex]
-                                              .dayList
-                                              .length,
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemBuilder: (context, index) {
-                                            final data = alarmList[mainIndex]
-                                                .dayList[index];
-                                            return Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 4.0),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    data.isClick =
-                                                        !data.isClick!;
-                                                  });
-                                                },
-                                                child: Text(
-                                                  data.day!,
-                                                  style: TextStyle(
-                                                      color: data.isClick ==
-                                                              true
-                                                          ? Colors.deepOrange
-                                                          : Colors.black),
-                                                ),
-                                              ),
-                                            );
-                                          }),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 40,
-                                  width: 70,
-                                  child: CustomSwitchButton(
-                                      isChecked:
-                                          alarmList[mainIndex].isChecked!),
-                                ),
-                                /* FlutterSwitch(
-                                    activeColor: Colors.black,
-                                    value: alarmList[mainIndex].isChecked!,
-                                    onToggle: (val) {
-                                      setState(() {
-                                        alarmList[mainIndex].isChecked = val;
-                                      });
-                                    })*/
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
-                ),
+                const AlarmPage(),
                 Container()
               ]),
             ),
@@ -756,22 +492,12 @@ class ClockPainter extends CustomPainter {
     // print(dateTime.minute);
     // print(dateTime.second);
 
-    double hourX = centerX -
-        outerRadius *
-            0.6 *
-            cos((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
-    double hourY = centerY -
-        outerRadius *
-            0.6 *
-            sin((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
-    double minX =
-        centerX - outerRadius * 0.7 * cos(dateTime.minute * 6 * pi / 180);
-    double minY =
-        centerX - outerRadius * 0.7 * sin(dateTime.minute * 6 * pi / 180);
-    double secX =
-        centerX - outerRadius * 0.8 * cos(dateTime.second * 6 * pi / 180);
-    double secY =
-        centerX - outerRadius * 0.8 * sin(dateTime.second * 6 * pi / 180);
+    double hourX = centerX - outerRadius * 0.6 * cos((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
+    double hourY = centerY - outerRadius * 0.6 * sin((dateTime.hour * 30 + dateTime.minute * 0.5) * pi / 180);
+    double minX = centerX - outerRadius * 0.7 * cos(dateTime.minute * 6 * pi / 180);
+    double minY = centerX - outerRadius * 0.7 * sin(dateTime.minute * 6 * pi / 180);
+    double secX = centerX - outerRadius * 0.8 * cos(dateTime.second * 6 * pi / 180);
+    double secY = centerX - outerRadius * 0.8 * sin(dateTime.second * 6 * pi / 180);
 
     Paint minLinePaint = Paint()
       ..color = Colors.red
